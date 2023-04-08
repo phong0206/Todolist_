@@ -9,17 +9,17 @@ import styled from "styled-components";
 
 const initalValues = [
     {
-        text: "kdsjof dsif ossdfs",
+        text: "Todo1",
         id: 1,
         completed: false,
     },
     {
-        text: "perwei dfij sodfi sdfs",
+        text: "Todo2",
         id: 2,
         completed: false,
     },
     {
-        text: "os isdjfo sdf sdf sdfsfsd sdf sdfsdfsdfs",
+        text: "Test Todo 3",
         id: 3,
         completed: false,
     },
