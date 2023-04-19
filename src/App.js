@@ -85,10 +85,10 @@ function App() {
   const handleDeleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
-  const handleEditTodo = (id) => {
-    const findTodo = todos.find(todo => todo.id ===id);
-    setEditTodo(findTodo)
-  };
+//   const handleEditTodo = (id) => {
+//     const findTodo = todos.find(todo => todo.id ===id);
+    
+//   };
 
   const handleFinishTodo = (id) => {
     const element = todos.findIndex((i) => i.id === id);
@@ -199,7 +199,7 @@ function App() {
                     </div>
                     <div className="button">
                       <div>
-                        <button onClick={setEditTodo(todo.id)} >Edit</button>
+                        <button >Edit</button>
                       </div>
                       <div>
                         {finish ? (
