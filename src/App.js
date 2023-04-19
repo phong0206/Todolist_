@@ -22,7 +22,7 @@ const initalValues = [
     completed: false,
   },
   {
-    text: "Test Todo 3",
+    text: "Todo 3",
     id: 3,
     completed: false,
   },
@@ -35,6 +35,8 @@ function App() {
   const [editingText, setEditingText] = useState("");
 
   const [finish, setFinish] = useState(true);
+  const [finishID, setFinishID] = useState(null);
+  const [deleteTodo, setDeleteTodo] = useState(null);
   const [openDialog, handleDisplay] = useState(false);
   const [openDialogEdit, handleDisplayEdit] = useState(false);
 
@@ -118,7 +120,7 @@ function App() {
       completed: true,
     };
     setTodos(newtodos);
-    setFinish(false);
+    setFinish(true);
   };
   const handleUnFinishTodo = (id) => {
     const element = todos.findIndex((i) => i.id === id);
@@ -128,7 +130,7 @@ function App() {
       completed: false,
     };
     setTodos(newtodos);
-    setFinish(true);
+    setFinish(false);
   };
 
   return (
@@ -221,40 +223,33 @@ function App() {
                     <div className="button">
                       <div>
                         {" "}
-                        {todo.id === editTodo ? (
-                          <Dialog
-                            onClose={handleCloseEdit}
-                            open={openDialogEdit}
-                          >
-                            <DialogTitle> Confirm Edit Todo </DialogTitle>
-                            <input
-                              type="text"
-                              value={editingText}
-                              onChange={(e) => setEditingText(e.target.value)}
-                            />
-                            <br></br>
-                            <br></br>
-                            <div style={divStyle}>
-                              <button
-                                style={confirmButtonStyle}
-                                onClick={() => {
-                                  submitEdits(todo.id);
-                                  handleCloseEdit();
-                                }}
-                              >
-                                Submit
-                              </button>
-                              <button
-                                style={confirmButtonStyle}
-                                onClick={handleCloseEdit}
-                              >
-                                Cancel
-                              </button>
-                            </div>
-                          </Dialog>
-                        ) : (
-                          <></>
-                        )}
+                        <Dialog onClose={handleCloseEdit} open={openDialogEdit}>
+                          <DialogTitle> Confirm Edit Todo </DialogTitle>
+                          <input
+                            type="text"
+                            value={editingText}
+                            onChange={(e) => setEditingText(e.target.value)}
+                          />
+                          <br></br>
+                          <br></br>
+                          <div style={divStyle}>
+                            <button
+                              style={confirmButtonStyle}
+                              onClick={() => {
+                                submitEdits(todo.id);
+                                handleCloseEdit();
+                              }}
+                            >
+                              Submit
+                            </button>
+                            <button
+                              style={confirmButtonStyle}
+                              onClick={handleCloseEdit}
+                            >
+                              Cancel
+                            </button>
+                          </div>
+                        </Dialog>
                         <button
                           onClick={() => {
                             setEditTodo(todo.id);
@@ -267,26 +262,35 @@ function App() {
                       </div>
 
                       <div>
-                        {finish ? (
-                          <button
-                            onClick={() => {
-                              handleFinishTodo(todo.id);
-                            }}
-                          >
-                            Finish
-                          </button>
-                        ) : (
+                        {finishID === todo.id ? (
                           <button
                             onClick={() => {
                               handleUnFinishTodo(todo.id);
+                              setFinishID(null)
                             }}
                           >
                             Unfinish
                           </button>
+                        ) : (
+                          <button
+                            onClick={() => {
+                              handleFinishTodo(todo.id);
+                              setFinishID(todo.id);
+                            }}
+                          >
+                            Finish
+                          </button>
                         )}
                       </div>
                       <div>
-                        <button onClick={openDialogBox}>delete</button>
+                        <button
+                          onClick={() => {
+                            openDialogBox();
+                            setDeleteTodo(todo.id);
+                          }}
+                        >
+                          delete
+                        </button>
                         <Dialog onClose={handleClose} open={openDialog}>
                           <DialogTitle> Confirm Delete Todo </DialogTitle>
                           <h3
@@ -299,8 +303,9 @@ function App() {
                             <button
                               style={confirmButtonStyle}
                               onClick={() => {
-                                handleDeleteTodo(todo.id);
+                                handleDeleteTodo(deleteTodo);
                                 handleClose();
+                                console.log(todo.id);
                               }}
                             >
                               Confirm
