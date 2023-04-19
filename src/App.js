@@ -36,6 +36,7 @@ function App() {
 
   const [finish, setFinish] = useState(true);
   const [openDialog, handleDisplay] = useState(false);
+  const [openDialogEdit, handleDisplayEdit] = useState(false);
 
   const handleClose = () => {
     handleDisplay(false);
@@ -43,6 +44,14 @@ function App() {
 
   const openDialogBox = () => {
     handleDisplay(true);
+  };
+  //
+  const handleCloseEdit = () => {
+    handleDisplayEdit(false);
+  };
+
+  const openDialogBoxEdit = () => {
+    handleDisplayEdit(true);
   };
   const buttonStyle = {
     width: "10rem",
@@ -56,7 +65,7 @@ function App() {
   };
   const divStyle = {
     display: "flex",
-    felxDirection: "row",
+    flexDirection: "row",
     position: "absolute",
     right: "0px",
     bottom: "0px",
@@ -204,30 +213,57 @@ function App() {
                 <div>
                   <div className="formText">
                     <div>
-                      {todo.id === editTodo ? (
-                        <input
-                          type="text"
-                          //   value={todo.text}
-                          onChange={(e) => setEditingText(e.target.value)}
-                        />
-                      ) : (
-                        <li className={todo.completed ? "done" : "work"}>
-                          {todo.text}
-                        </li>
-                      )}
+                      <li className={todo.completed ? "done" : "work"}>
+                        {todo.text}
+                      </li>
                     </div>
 
                     <div className="button">
                       <div>
+                        {" "}
                         {todo.id === editTodo ? (
-                          <button onClick={() => submitEdits(todo.id)}>
-                            Submit Edits
-                          </button>
+                          <Dialog
+                            onClose={handleCloseEdit}
+                            open={openDialogEdit}
+                          >
+                            <DialogTitle> Confirm Edit Todo </DialogTitle>
+                            <input
+                              type="text"
+                              value={editingText}
+                              onChange={(e) => setEditingText(e.target.value)}
+                            />
+                            <br></br>
+                            <br></br>
+                            <div style={divStyle}>
+                              <button
+                                style={confirmButtonStyle}
+                                onClick={() => {
+                                  submitEdits(todo.id);
+                                  handleCloseEdit();
+                                }}
+                              >
+                                Submit
+                              </button>
+                              <button
+                                style={confirmButtonStyle}
+                                onClick={handleCloseEdit}
+                              >
+                                Cancel
+                              </button>
+                            </div>
+                          </Dialog>
                         ) : (
-                          <button onClick={() => setEditTodo(todo.id)}>
-                            Edit
-                          </button>
+                          <></>
                         )}
+                        <button
+                          onClick={() => {
+                            setEditTodo(todo.id);
+                            setEditingText(todo.text);
+                            openDialogBoxEdit();
+                          }}
+                        >
+                          Edit
+                        </button>
                       </div>
 
                       <div>
