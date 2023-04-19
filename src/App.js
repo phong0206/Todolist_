@@ -1,6 +1,6 @@
 import logo from "./logo.svg";
 import "./App.css";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import "./Component/ImageUploader";
 import ImageUploader from "./Component/ImageUploader";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
@@ -21,9 +21,15 @@ const initalValues = [
     id: 2,
     completed: false,
   },
+
   {
-    text: "Todo 3",
-    id: 3,
+    text: "Todo 4",
+    id: 4,
+    completed: false,
+  },
+  {
+    text: "Todo 5",
+    id: 5,
     completed: false,
   },
 ];
@@ -39,6 +45,8 @@ function App() {
   const [deleteTodo, setDeleteTodo] = useState(null);
   const [openDialog, handleDisplay] = useState(false);
   const [openDialogEdit, handleDisplayEdit] = useState(false);
+
+  const inputRef = useRef(null);
 
   const handleClose = () => {
     handleDisplay(false);
@@ -95,6 +103,7 @@ function App() {
     };
     setTodos([newTodo, ...todos]);
     setText("");
+    inputRef.current.focus();
   };
 
   const handleDeleteTodo = (id) => {
@@ -186,6 +195,7 @@ function App() {
         <div className="form-input">
           <div>
             <input
+              ref={inputRef}
               type="text"
               placeholder="Enter your Todo"
               name="text"
@@ -236,7 +246,7 @@ function App() {
                             <button
                               style={confirmButtonStyle}
                               onClick={() => {
-                                submitEdits(todo.id);
+                                submitEdits(editTodo);
                                 handleCloseEdit();
                               }}
                             >
@@ -266,7 +276,7 @@ function App() {
                           <button
                             onClick={() => {
                               handleUnFinishTodo(todo.id);
-                              setFinishID(null)
+                              setFinishID(null);
                             }}
                           >
                             Unfinish
