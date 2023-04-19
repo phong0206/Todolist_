@@ -30,7 +30,10 @@ const initalValues = [
 function App() {
   const [todos, setTodos] = useState(initalValues);
   const [text, setText] = useState();
-  const [ediTodo, setEditTodo] = useState(null);
+
+  const [editTodo, setEditTodo] = useState(null);
+  const [editingText, setEditingText] = useState("");
+
   const [finish, setFinish] = useState(true);
   const [openDialog, handleDisplay] = useState(false);
 
@@ -69,7 +72,8 @@ function App() {
     borderRadius: "10px",
     border: "1px solid black",
   };
-  const handleAddTodos = () => {
+  const handleAddTodos = (e) => {
+    e.preventDefault();
     if (!text) {
       return;
     }
@@ -85,10 +89,17 @@ function App() {
   const handleDeleteTodo = (id) => {
     setTodos(todos.filter((todo) => todo.id !== id));
   };
-//   const handleEditTodo = (id) => {
-//     const findTodo = todos.find(todo => todo.id ===id);
-    
-//   };
+
+  function submitEdits(id) {
+    const updatedTodos = [...todos].map((todo) => {
+      if (todo.id === id) {
+        todo.text = editingText;
+      }
+      return todo;
+    });
+    setTodos(updatedTodos);
+    setEditTodo(null);
+  }
 
   const handleFinishTodo = (id) => {
     const element = todos.findIndex((i) => i.id === id);
@@ -187,20 +198,38 @@ function App() {
           </div>
         </div>
         <div className="todo-list">
-          <ol>
+          <ul>
             {todos.map((todo) => (
               <div className="todos" key={todo.id}>
                 <div>
                   <div className="formText">
                     <div>
-                      <li className={todo.completed ? "done" : "work"}>
-                        {todo.text}
-                      </li>
+                      {todo.id === editTodo ? (
+                        <input
+                          type="text"
+                          //   value={todo.text}
+                          onChange={(e) => setEditingText(e.target.value)}
+                        />
+                      ) : (
+                        <li className={todo.completed ? "done" : "work"}>
+                          {todo.text}
+                        </li>
+                      )}
                     </div>
+
                     <div className="button">
                       <div>
-                        <button >Edit</button>
+                        {todo.id === editTodo ? (
+                          <button onClick={() => submitEdits(todo.id)}>
+                            Submit Edits
+                          </button>
+                        ) : (
+                          <button onClick={() => setEditTodo(todo.id)}>
+                            Edit
+                          </button>
+                        )}
                       </div>
+
                       <div>
                         {finish ? (
                           <button
@@ -254,7 +283,7 @@ function App() {
                 </div>
               </div>
             ))}
-          </ol>
+          </ul>
         </div>
         <div></div>
       </div>
