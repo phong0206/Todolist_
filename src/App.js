@@ -9,7 +9,36 @@ import styled from "styled-components";
 import DialogTitle from "@mui/material/DialogTitle";
 import Dialog from "@mui/material/Dialog";
 import { height } from "@mui/system";
+import FocusTrap from "@mui/base/FocusTrap";
 
+const buttonStyle = {
+  width: "10rem",
+  fontsize: "1.5rem",
+  height: "2rem",
+  padding: "5px",
+  borderRadius: "10px",
+  backgroundColor: "green",
+  color: "White",
+  border: "2px solid yellow",
+};
+const divStyle = {
+  display: "flex",
+  flexDirection: "row",
+  position: "absolute",
+  right: "0px",
+  bottom: "0px",
+  // padding: "1rem",
+};
+const confirmButtonStyle = {
+  width: "5rem",
+  height: "1.5rem",
+  fontsize: "1rem",
+  backgroundColor: "grey",
+  color: "black",
+  margin: "5px",
+  borderRadius: "10px",
+  border: "1px solid black",
+};
 const initalValues = [
   {
     text: "Todo1",
@@ -63,34 +92,7 @@ function App() {
   const openDialogBoxEdit = () => {
     handleDisplayEdit(true);
   };
-  const buttonStyle = {
-    width: "10rem",
-    fontsize: "1.5rem",
-    height: "2rem",
-    padding: "5px",
-    borderRadius: "10px",
-    backgroundColor: "green",
-    color: "White",
-    border: "2px solid yellow",
-  };
-  const divStyle = {
-    display: "flex",
-    flexDirection: "row",
-    position: "absolute",
-    right: "0px",
-    bottom: "0px",
-    // padding: "1rem",
-  };
-  const confirmButtonStyle = {
-    width: "5rem",
-    height: "1.5rem",
-    fontsize: "1rem",
-    backgroundColor: "grey",
-    color: "black",
-    margin: "5px",
-    borderRadius: "10px",
-    border: "1px solid black",
-  };
+
   const handleAddTodos = (e) => {
     e.preventDefault();
     if (!text) {
@@ -235,6 +237,7 @@ function App() {
                         {" "}
                         <Dialog onClose={handleCloseEdit} open={openDialogEdit}>
                           <DialogTitle> Confirm Edit Todo </DialogTitle>
+
                           <input
                             type="text"
                             value={editingText}
