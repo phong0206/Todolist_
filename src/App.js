@@ -63,7 +63,7 @@ const confirmButtonStyle = {
 //   },
 // ];
 function App() {
-  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")));
+  const [todos, setTodos] = useState([]);
   const [text, setText] = useState("");
 
   const [editTodo, setEditTodo] = useState(null);
@@ -154,12 +154,14 @@ function App() {
 
   useEffect(() => {
     localStorage.setItem("todos", JSON.stringify(todos));
-    console.log(JSON.parse(localStorage.getItem("todos")));
+    // console.log(JSON.parse(localStorage.getItem("todos")));
   }, [todos, text]);
   useEffect(() => {
     const storedTodos = localStorage.getItem("todos");
+    console.log(storedTodos);
     if (storedTodos) {
       setTodos(JSON.parse(storedTodos));
+      
     }
   }, []);
 
