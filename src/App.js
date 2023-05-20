@@ -39,32 +39,32 @@ const confirmButtonStyle = {
   borderRadius: "10px",
   border: "1px solid black",
 };
-const initalValues = [
-  {
-    text: "Todo1",
-    id: 1,
-    completed: false,
-  },
-  {
-    text: "Todo2",
-    id: 2,
-    completed: false,
-  },
+// const initalValues = [
+//   {
+//     text: "Todo1",
+//     id: 1,
+//     completed: false,
+//   },
+//   {
+//     text: "Todo2",
+//     id: 2,
+//     completed: false,
+//   },
 
-  {
-    text: "Todo 4",
-    id: 4,
-    completed: false,
-  },
-  {
-    text: "Todo 5",
-    id: 5,
-    completed: false,
-  },
-];
+//   {
+//     text: "Todo 4",
+//     id: 4,
+//     completed: false,
+//   },
+//   {
+//     text: "Todo 5",
+//     id: 5,
+//     completed: false,
+//   },
+// ];
 function App() {
-  const [todos, setTodos] = useState(initalValues);
-  const [text, setText] = useState();
+  const [todos, setTodos] = useState(JSON.parse(localStorage.getItem("todos")));
+  const [text, setText] = useState("");
 
   const [editTodo, setEditTodo] = useState(null);
   const [editingText, setEditingText] = useState("");
@@ -103,13 +103,17 @@ function App() {
       id: Math.floor(Math.random() * 10000) + 1,
       completed: false,
     };
-    setTodos([newTodo, ...todos]);
+    const updatedTodos = [newTodo, ...todos];
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setText("");
     inputRef.current.focus();
   };
 
   const handleDeleteTodo = (id) => {
-    setTodos(todos.filter((todo) => todo.id !== id));
+    const updatedTodos = todos.filter((todo) => todo.id !== id);
+    setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
   };
 
   function submitEdits(id) {
@@ -120,6 +124,7 @@ function App() {
       return todo;
     });
     setTodos(updatedTodos);
+    localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setEditTodo(null);
   }
 
@@ -131,6 +136,8 @@ function App() {
       completed: true,
     };
     setTodos(newtodos);
+
+    localStorage.setItem("todos", JSON.stringify(newtodos));
     setFinish(true);
   };
   const handleUnFinishTodo = (id) => {
@@ -141,8 +148,20 @@ function App() {
       completed: false,
     };
     setTodos(newtodos);
+    localStorage.setItem("todos", JSON.stringify(newtodos));
     setFinish(false);
   };
+
+  useEffect(() => {
+    localStorage.setItem("todos", JSON.stringify(todos));
+    console.log(JSON.parse(localStorage.getItem("todos")));
+  }, [todos, text]);
+  useEffect(() => {
+    const storedTodos = localStorage.getItem("todos");
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, []);
 
   return (
     <section className="App">
@@ -222,7 +241,7 @@ function App() {
         </div>
         <div className="todo-list">
           <ul>
-            {todos.map((todo) => (
+            {JSON.parse(localStorage.getItem("todos")).map((todo) => (
               <div className="todos" key={todo.id}>
                 <div>
                   <div className="formText">
@@ -307,7 +326,10 @@ function App() {
                         <Dialog onClose={handleClose} open={openDialog}>
                           <DialogTitle> Confirm Delete Todo </DialogTitle>
                           <h3
-                            style={{ marginTop: "-10px", padding: "5px 10px" }}
+                            style={{
+                              marginTop: "-10px",
+                              padding: "5px 10px",
+                            }}
                           >
                             Are you sure to delete the Todo?{" "}
                           </h3>
