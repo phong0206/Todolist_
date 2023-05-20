@@ -110,16 +110,17 @@ function App() {
       completed: false,
     };
     const updatedTodos = [newTodo, ...todos];
-    setReload(!reload)
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setText("");
+    setReload(!reload);
     inputRef.current.focus();
   };
 
   const handleDeleteTodo = (id) => {
     const updatedTodos = todos.filter((todo) => todo.id !== id);
-    setReload(!reload);
+
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
+    setReload(!reload);
   };
 
   function submitEdits(id) {
@@ -129,9 +130,9 @@ function App() {
       }
       return todo;
     });
-    setReload(!reload);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setEditTodo(null);
+    setReload(!reload);
   }
 
   const handleFinishTodo = (id) => {
@@ -141,10 +142,10 @@ function App() {
       ...newtodos[element],
       completed: true,
     };
-    setReload(!reload);
 
     localStorage.setItem("todos", JSON.stringify(newtodos));
     setFinish(true);
+    setReload(!reload);
   };
   const handleUnFinishTodo = (id) => {
     const element = todos.findIndex((i) => i.id === id);
@@ -153,9 +154,9 @@ function App() {
       ...newtodos[element],
       completed: false,
     };
-    setReload(!reload);
     localStorage.setItem("todos", JSON.stringify(newtodos));
     setFinish(false);
+    setReload(!reload);
   };
 
   return (
