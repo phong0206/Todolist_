@@ -74,7 +74,13 @@ function App() {
   const [deleteTodo, setDeleteTodo] = useState(null);
   const [openDialog, handleDisplay] = useState(false);
   const [openDialogEdit, handleDisplayEdit] = useState(false);
-
+  const [reload, setReload] = useState(false);
+  useEffect(() => {
+    const storedTodos = localStorage.getItem("todos");
+    if (storedTodos) {
+      setTodos(JSON.parse(storedTodos));
+    }
+  }, [reload]);
   const inputRef = useRef(null);
 
   const handleClose = () => {
@@ -104,7 +110,7 @@ function App() {
       completed: false,
     };
     const updatedTodos = [newTodo, ...todos];
-    setTodos(updatedTodos);
+    setReload(!reload)
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setText("");
     inputRef.current.focus();
@@ -112,7 +118,7 @@ function App() {
 
   const handleDeleteTodo = (id) => {
     const updatedTodos = todos.filter((todo) => todo.id !== id);
-    setTodos(updatedTodos);
+    setReload(!reload);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
   };
 
@@ -123,7 +129,7 @@ function App() {
       }
       return todo;
     });
-    setTodos(updatedTodos);
+    setReload(!reload);
     localStorage.setItem("todos", JSON.stringify(updatedTodos));
     setEditTodo(null);
   }
@@ -135,7 +141,7 @@ function App() {
       ...newtodos[element],
       completed: true,
     };
-    setTodos(newtodos);
+    setReload(!reload);
 
     localStorage.setItem("todos", JSON.stringify(newtodos));
     setFinish(true);
@@ -147,23 +153,10 @@ function App() {
       ...newtodos[element],
       completed: false,
     };
-    setTodos(newtodos);
+    setReload(!reload);
     localStorage.setItem("todos", JSON.stringify(newtodos));
     setFinish(false);
   };
-
-  useEffect(() => {
-    localStorage.setItem("todos", JSON.stringify(todos));
-    // console.log(JSON.parse(localStorage.getItem("todos")));
-  }, [todos, text]);
-  useEffect(() => {
-    const storedTodos = localStorage.getItem("todos");
-    console.log(storedTodos);
-    if (storedTodos) {
-      setTodos(JSON.parse(storedTodos));
-      
-    }
-  }, []);
 
   return (
     <section className="App">
@@ -243,7 +236,7 @@ function App() {
         </div>
         <div className="todo-list">
           <ul>
-            {JSON.parse(localStorage.getItem("todos")).map((todo) => (
+            {todos.map((todo) => (
               <div className="todos" key={todo.id}>
                 <div>
                   <div className="formText">
